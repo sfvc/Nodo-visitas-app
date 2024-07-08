@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:nodo_app_2/form_ingresos.dart';
-import 'package:nodo_app_2/personal_lista.dart';
-import 'package:nodo_app_2/ingresos_lista.dart';
-import 'package:nodo_app_2/api_client.dart'; // Import your ApiClient class
+import 'package:nodo_app_2/feature/home/presentation/widgets/form_ingresos.dart';
+import 'package:nodo_app_2/feature/home/presentation/widgets/personal_lista.dart';
+import 'package:nodo_app_2/feature/home/presentation/widgets/ingresos_lista.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -29,7 +28,7 @@ class _HomeState extends State<Home> {
 
     if (showPersonalLista) {
       // Render PersonalLista
-      bodyWidget = PersonalLista();
+      bodyWidget = const PersonalLista();
     } else {
       // Render IngresosLista
       bodyWidget = IngresosLista();
@@ -37,7 +36,7 @@ class _HomeState extends State<Home> {
 
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 100,
+        // toolbarHeight: 100,s
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -90,7 +89,7 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
-      body: bodyWidget, // Display the appropriate list based on state
+      body: bodyWidget,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showMaterialModalBottomSheet(
@@ -105,7 +104,6 @@ class _HomeState extends State<Home> {
   }
 }
 
-// Define a custom search delegate
 class DataSearch extends SearchDelegate<String> {
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -164,10 +162,17 @@ class DataSearch extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     // Show suggestions as the user types
-    final List<String> suggestions = ['Result 1', 'Result 2', 'Result 3']; // Replace with your actual suggestions
+    final List<String> suggestions = [
+      'Result 1',
+      'Result 2',
+      'Result 3'
+    ]; // Replace with your actual suggestions
     final List<String> filteredSuggestions = query.isEmpty
         ? suggestions
-        : suggestions.where((suggestion) => suggestion.toLowerCase().contains(query.toLowerCase())).toList();
+        : suggestions
+            .where((suggestion) =>
+                suggestion.toLowerCase().contains(query.toLowerCase()))
+            .toList();
 
     return ListView.builder(
       itemCount: filteredSuggestions.length,

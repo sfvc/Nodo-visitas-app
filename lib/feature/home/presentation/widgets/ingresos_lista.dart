@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nodo_app_2/api_client.dart'; // Import your ApiClient class
+import 'package:nodo_app_2/shared/services/api_client.dart'; // Import your ApiClient class
 
 class IngresosLista extends StatefulWidget {
   @override
@@ -13,7 +13,7 @@ class _IngresosListaState extends State<IngresosLista> {
   @override
   void initState() {
     super.initState();
-    fetchData();
+    // fetchData();
   }
 
   Future<void> fetchData() async {
