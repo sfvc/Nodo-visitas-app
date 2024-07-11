@@ -5,8 +5,7 @@ import 'package:nodo_app_2/feature/home/infraestructure/services/visits_service.
 final visitService = VisitService();
 final visitsProvider = FutureProvider<List<Visita>>((ref) async {
   try {
-    final apiResponse = await visitService.getVisits();
-
+    final apiResponse = await visitService.getCurrentVisits();
     return apiResponse;
   } catch (error) {
     throw Error();
