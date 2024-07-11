@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:nodo_app_2/feature/home/home_wrapper.dart';
 import 'package:nodo_app_2/feature/home/providers/state.provider.dart';
 import 'package:nodo_app_2/shared/shared_wapper.dart';
@@ -15,7 +16,7 @@ class HomeScreen extends StatelessWidget {
         elevation: 0,
         title: const Row(children: [
           Text(
-            '¡Hola Nodo',
+            '¡Hola Nodo!',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.normal,
@@ -35,6 +36,16 @@ class HomeScreen extends StatelessWidget {
         child: _HomeBody(),
       ),
       bottomNavigationBar: const BottomNavigationCommon(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showMaterialModalBottomSheet(
+            context: context,
+            builder: (context) => const FormIngresos(),
+          );
+        },
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

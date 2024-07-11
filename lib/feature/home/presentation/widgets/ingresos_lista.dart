@@ -16,12 +16,12 @@ class _IngresosListaState extends State<IngresosLista> {
     // fetchData();
   }
 
-  Future<void> fetchData() async {
-    List<String> fetchedIngresos = await _apiClient.fetchIngresos();
-    setState(() {
-      ingresos = fetchedIngresos;
-    });
-  }
+  // Future<void> fetchData() async {
+  //   List<String> fetchedIngresos = await _apiClient.fetchIngresos();
+  //   setState(() {
+  //     ingresos = fetchedIngresos;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

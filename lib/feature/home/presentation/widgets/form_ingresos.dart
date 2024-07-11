@@ -20,6 +20,8 @@ class FormIngresos extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                _inputText(context, title: 'Dni'),
+                const SizedBox(height: 20),
                 _inputText(context, title: 'Nombre'),
                 const SizedBox(height: 20),
                 _inputText(context, title: 'Motivo'),
@@ -30,7 +32,8 @@ class FormIngresos extends StatelessWidget {
                   children: [
                     OutlinedButton(
                       onPressed: () {
-                        Navigator.pop(context); // Navigate back to previous screen
+                        Navigator.pop(
+                            context); // Navigate back to previous screen
                       },
                       child: const Text('Cerrar'),
                     ),
@@ -60,7 +63,8 @@ class FormIngresos extends StatelessWidget {
           borderSide: BorderSide(color: Colors.blue),
         ),
         enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Theme.of(context).primaryColor.withOpacity(0.5)),
+          borderSide: BorderSide(
+              color: Theme.of(context).primaryColor.withOpacity(0.5)),
         ),
       ),
       cursorColor: Theme.of(context).primaryColor,
