@@ -8,5 +8,12 @@ final goRouterProvider = Provider((ref) {
       path: '/',
       builder: (context, state) => const HomeScreen(),
     ),
+    GoRoute(
+      path: '/visit-detail/:id',
+      builder: (context, state) {
+        final visitId = state.pathParameters['id']!;
+        return VisitDetail(visitId: visitId);
+      },
+    ),
   ]);
 });
