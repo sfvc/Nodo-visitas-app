@@ -18,6 +18,7 @@ class VisitMapper {
         nombre: json['nombre'] ?? '',
         apellido: json['apellido'] ?? '',
         dni: json['dni'] ?? '',
-        telefono: json['telefono'] ?? '');
+        telefono: json['telefono'] ?? '',
+        funcion: json['funcion'] ?? '');
   }
 }

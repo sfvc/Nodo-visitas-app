@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nodo_app_2/config/router/app_router.dart';
 import 'package:nodo_app_2/feature/home/providers/visits_provider.dart';
 import 'package:nodo_app_2/shared/shared_wapper.dart';
 
 class HomeContent extends ConsumerWidget {
   const HomeContent({super.key});
 
-  Future _refreshVisits(WidgetRef ref) async {
-    // Refresca el provider para recargar los datos
-    await ref.refresh(visitsProvider.future);
-  }
+  // Future _refreshVisits(WidgetRef ref) async {
+  //   // Refresca el provider para recargar los datos
+  //   // ignore: unused_result
+  //   await ref.refresh(visitsProvider.future);
+  // }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = Theme.of(context).colorScheme;
 
-    final visitsList = ref.watch(visitsProvider);
+    final currentVisitsList = ref.watch(currentVisitsProvider);
     final currentDate = IntlService().getCurrentDateFormatted();
 
-    return visitsList.when(
+    return currentVisitsList.when(
       data: (visits) => Column(
         children: [
           const SizedBox(height: 10),
@@ -31,55 +33,74 @@ class HomeContent extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 0),
               child: RefreshIndicator(
-                onRefresh: () => _refreshVisits(ref),
-                child: ListView.builder(
-                  itemCount: visits.length,
-                  itemBuilder: (context, index) {
-                    final visit = visits[index];
-                    return Column(
-                      children: [
-                        ListTile(
-                          leading: const Icon(
-                            Icons.account_circle_outlined,
-                            size: 40,
-                          ),
-                          title: Row(
+                onRefresh: () => ref.refresh(currentVisitsProvider.future),
+                child: visits.isEmpty
+                    ? const Center(
+                        child: Text('No hay visitas cargadas el día de hoy'))
+                    : ListView.builder(
+                        itemCount: visits.length,
+                        itemBuilder: (context, index) {
+                          final visit = visits[index];
+                          return Column(
                             children: [
-                              const Icon(Icons.person),
-                              const SizedBox(width: 8),
-                              Text(
-                                  '${visit.persona.nombre} ${visit.persona.apellido}'),
-                            ],
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 3),
-                              Row(
-                                children: [Text(visit.motivo)],
+                              ListTile(
+                                onTap: () {
+                                  ref
+                                      .read(goRouterProvider)
+                                      .push('/visit-detail/${visit.id}');
+                                },
+                                leading: const Icon(
+                                  Icons.account_circle_outlined,
+                                  size: 40,
+                                ),
+                                title: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text('${visit.persona.apellido} '),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text('${visit.persona.nombre} '),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(height: 3),
+                                    // Row(
+                                    //   children: [Text(visit.motivo)],
+                                    // ),
+                                    Row(
+                                      children: [Text(visit.persona.funcion)],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text('DNI: ${visit.persona.dni}')
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                trailing: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(visit.dia),
+                                    Text(visit.hora),
+                                  ],
+                                ),
+                                isThreeLine: false,
                               ),
-                              Row(
-                                children: [Text('DNI: ${visit.persona.dni}')],
+                              Divider(
+                                height: 10,
+                                color: colors.primary,
                               ),
                             ],
-                          ),
-                          trailing: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(visit.dia),
-                              Text(visit.hora),
-                            ],
-                          ),
-                          isThreeLine: false,
-                        ),
-                        Divider(
-                          height: 10,
-                          color: colors.primary,
-                        ),
-                      ],
-                    );
-                  },
-                ),
+                          );
+                        },
+                      ),
               ),
             ),
           ),
