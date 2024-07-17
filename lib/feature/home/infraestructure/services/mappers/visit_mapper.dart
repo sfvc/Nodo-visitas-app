@@ -22,3 +22,25 @@ class VisitMapper {
         funcion: json['funcion'] ?? '');
   }
 }
+
+class PersonaMapper {
+  static Persona personaJsonToEntity(Map<String, dynamic> json) {
+    return Persona(
+        id: json['id'] ?? '',
+        nombre: json['nombre'] ?? '',
+        apellido: json['apellido'] ?? '',
+        dni: json['dni'] ?? '',
+        telefono: json['telefono'] ?? '',
+        funcion: json['funcion'] ?? '');
+  }
+
+  // static Map<String, dynamic> toJson(Persona persona) {
+  //   return {
+  //     'id': persona.id,
+  //     'nombre': persona.nombre,
+  //     'apellido': persona.apellido,
+  //     'dni': persona.dni,
+  //     'telefono': persona.telefono,
+  //   };
+  // }
+}

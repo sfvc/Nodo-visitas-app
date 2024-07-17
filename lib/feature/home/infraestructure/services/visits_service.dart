@@ -49,7 +49,7 @@ class VisitService {
   Future createNewVisit(Object body) async {
     try {
       final apiResponse = await api.postHttp(path: '/ingresos', body: body);
-      return;
+      return apiResponse;
     } on DioException catch (error) {
       return error.response;
     }
@@ -57,7 +57,7 @@ class VisitService {
 
   Future getPeronaByDni(String dni) async {
     try {
-      final apiResponse = await api.postHttp(path: '/persona/buscar/dni/$dni');
+      final apiResponse = await api.getHttp(path: '/persona/buscar/dni/$dni');
       return apiResponse;
     } on DioException catch (error) {
       return error.response;

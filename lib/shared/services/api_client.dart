@@ -33,19 +33,9 @@ class ApiClient {
 
       return response;
     } on DioException catch (dioError) {
-      return dioError.response;
+      return dioError;
     } catch (error) {
       return error;
     }
   }
-
-  // Future /* <List<String>>  */ fetchIngresos() async {
-  //   try {
-  //     final response = await dio.get('/ingresos');
-  //     return List<String>.from(response.data);
-  //   } catch (e) {
-  //     print('Error fetching ingresos: $e');
-  //     return e; // Return ;empty list on error
-  //   }
-  // }
 }
