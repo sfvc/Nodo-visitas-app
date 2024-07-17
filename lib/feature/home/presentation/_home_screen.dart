@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:nodo_app_2/feature/home/presentation/widgets/form_ingresos.dart';
+import 'package:nodo_app_2/feature/home/presentation/widgets/form_ingresos_screen.dart';
 import 'package:nodo_app_2/feature/home/presentation/widgets/personal_lista.dart';
 import 'package:nodo_app_2/feature/home/presentation/widgets/ingresos_lista.dart';
 
@@ -94,7 +94,7 @@ class _HomeState extends State<Home> {
         onPressed: () {
           showMaterialModalBottomSheet(
             context: context,
-            builder: (context) => const FormIngresos(),
+            builder: (context) =>  FormIngresos(),
           );
         },
         tooltip: 'Increment',
