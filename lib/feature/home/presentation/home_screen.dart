@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:nodo_app_2/config/router/app_router.dart';
 import 'package:nodo_app_2/feature/home/home_wrapper.dart';
 import 'package:nodo_app_2/feature/home/providers/state.provider.dart';
 import 'package:nodo_app_2/shared/shared_wapper.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -36,15 +37,12 @@ class HomeScreen extends StatelessWidget {
         child: _HomeBody(),
       ),
       bottomNavigationBar: const BottomNavigationCommon(),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FilledButton.icon(
+        icon: const Icon(Icons.add),
+        label: const Text('NUEVO'),
         onPressed: () {
-          showMaterialModalBottomSheet(
-            context: context,
-            builder: (context) => const FormIngresos(),
-          );
+          ref.read(goRouterProvider).push('/form-ingreso');
         },
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }

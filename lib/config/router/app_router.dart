@@ -15,5 +15,9 @@ final goRouterProvider = Provider((ref) {
         return VisitDetail(visitId: visitId);
       },
     ),
+    GoRoute(
+      path: '/form-ingreso',
+      builder: (context, state) => FormIngresos(),
+    ),
   ]);
 });
