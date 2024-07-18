@@ -11,22 +11,26 @@ class IngresoFormState {
   final String turno;
   final String motivo;
   final Persona? persona;
+  final bool isPosting;
 
   IngresoFormState({
     this.persona,
+    this.isPosting = false,
     this.dni = '',
     this.turno = '',
     this.motivo = '',
   });
 
-  IngresoFormState copyWith(
-      {String? dni,
-      String? turno,
-      String? motivo,
-      bool? isValid,
-      Persona? persona}) {
+  IngresoFormState copyWith({
+    String? dni,
+    String? turno,
+    String? motivo,
+    bool? isPosting,
+    Persona? persona,
+  }) {
     return IngresoFormState(
       dni: dni ?? this.dni,
+      isPosting: isPosting ?? this.isPosting,
       turno: turno ?? this.turno,
       motivo: motivo ?? this.motivo,
       persona: persona ?? this.persona,
@@ -38,37 +42,26 @@ class IngresoNotifier extends StateNotifier<IngresoFormState> {
   IngresoNotifier() : super(IngresoFormState());
 
   void updateDni(String dni) {
-    state = state.copyWith(
-      dni: dni,
-      // isValid: _validateForm(dni, state.nombre, state.motivo),
-    );
+    state = state.copyWith(dni: dni);
   }
 
   void updateTurno(String turno) {
-    state = state.copyWith(
-      turno: turno,
-      // isValid: _validateForm(state.dni, nombre, state.motivo),
-    );
+    state = state.copyWith(turno: turno);
   }
 
   void updateMotivo(String motivo) {
-    state = state.copyWith(
-      motivo: motivo,
-      // isValid: _validateForm(state.dni, state.nombre, motivo),
-    );
+    state = state.copyWith(motivo: motivo);
   }
 
   void updatePersona(Persona persona) {
-    state = state.copyWith(
-      persona: persona,
-    );
+    state = state.copyWith(persona: persona);
+  }
+
+  void updateIsPosting(bool isPosting) {
+    state = state.copyWith(isPosting: isPosting);
   }
 
   void reset() {
     state = IngresoFormState();
   }
-
-  // bool _validateForm(String dni, String nombre, String motivo) {
-  //   return dni.isNotEmpty && nombre.isNotEmpty && motivo.isNotEmpty;
-  // }
 }

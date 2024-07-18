@@ -46,7 +46,7 @@ class VisitService {
     }
   }
 
-  Future createNewVisit(Object body) async {
+  Future createNewVisit(body) async {
     try {
       final apiResponse = await api.postHttp(path: '/ingresos', body: body);
       return apiResponse;

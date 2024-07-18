@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:nodo_app_2/config/router/app_router.dart';
 import 'package:nodo_app_2/feature/home/home_wrapper.dart';
 import 'package:nodo_app_2/feature/home/providers/state.provider.dart';

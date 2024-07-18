@@ -5,6 +5,7 @@ import 'package:nodo_app_2/config/router/app_router.dart';
 import 'package:nodo_app_2/feature/home/domain/person_entity.dart';
 import 'package:nodo_app_2/feature/home/infraestructure/services/visits_service.dart';
 import 'package:nodo_app_2/feature/home/providers/form_ingreso_provider.dart';
+import 'package:nodo_app_2/shared/providers/aler_toast_provider.dart';
 
 class FormIngresos extends ConsumerWidget {
   final _formKey = GlobalKey<FormState>();
@@ -21,36 +22,14 @@ class FormIngresos extends ConsumerWidget {
     final ingresosProvider = ref.read(ingresoFormProvider.notifier);
     // ref.read(goRouterProvider).push('/notifications');
     final routerProvider = ref.read(goRouterProvider);
-
-    // _createNewIngreso() {
-    //   final Map<String, dynamic> ingresoData = {
-    //     // "tiempo": ingresoFormState.turno,
-    //     "motivo":
-    //         ingresoFormState.motivo, /* "personaId":ingresoFormState.turno */
-    //   };
-
-    //   try {
-    //     final response = serviceIngresos.createNewVisit(ingresoData);
-    //   } catch (e) {}
-    // }
-
-    // Future getPersonaByDni() async {
-    //   try {
-    //     if (ingresoFormState.dni.length > 7) {
-    //       final response =
-    //           await serviceIngresos.getPeronaByDni(ingresoFormState.dni);
-    //       return response;
-    //     }
-    //   } catch (error) {
-    //     throw Exception(error);
-    //   }
-    // }
+    final alerToast = ref.read(alertProvider.notifier);
 
     return Scaffold(
         appBar: AppBar(),
         body: ingresoFormState.persona == null
             ? FormCreateIngreso(
                 formKey: _formKey,
+                alerToast: alerToast,
                 dniController: dniController,
                 ingresosProvider: ingresosProvider,
                 turnoController: turnoController,
@@ -58,6 +37,7 @@ class FormIngresos extends ConsumerWidget {
                 ingresoFormState: ingresoFormState,
                 serviceIngresos: serviceIngresos)
             : ConfirmPersonaData(
+                alerToast: alerToast,
                 ingresoFormState: ingresoFormState,
                 ingresosProvider: ingresosProvider,
                 routerProvider: routerProvider,
@@ -68,12 +48,14 @@ class FormIngresos extends ConsumerWidget {
 class ConfirmPersonaData extends StatelessWidget {
   const ConfirmPersonaData({
     super.key,
+    required this.alerToast,
     required this.ingresoFormState,
     required this.ingresosProvider,
     required this.routerProvider,
     required this.serviceIngresos,
   });
 
+  final AlertNotifier alerToast;
   final IngresoFormState ingresoFormState;
   final IngresoNotifier ingresosProvider;
   final GoRouter routerProvider;
@@ -82,6 +64,7 @@ class ConfirmPersonaData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future createTruno() async {
+      ingresosProvider.updateIsPosting(true);
       try {
         final body = {
           'tiempo': ingresoFormState.turno,
@@ -89,18 +72,20 @@ class ConfirmPersonaData extends StatelessWidget {
           'personaId': ingresoFormState.persona?.id,
         };
         final response = await serviceIngresos.createNewVisit(body);
-
-        if (response.statusCode == 200) {
-          // Manejar el éxito
-          print('Turno creado exitosamente');
+        if (response.statusCode == 201) {
+          alerToast.showAlert(
+              alertType: AlertType.success, message: 'Turno creado');
+          ingresosProvider.reset();
+          routerProvider.replace('/');
         } else {
-          // Manejar el error
-          print('Error al crear el turno: ${response.statusCode}');
+          alerToast.showAlert(
+              alertType: AlertType.error, message: 'no se pudo crear turno');
         }
       } catch (e) {
-        // Manejar el error si es necesario
-        print('Excepción al crear el turno: $e');
+        alerToast.showAlert(
+            alertType: AlertType.error, message: 'Error al crear turno');
       }
+      ingresosProvider.updateIsPosting(false);
     }
 
     return Padding(
@@ -137,17 +122,21 @@ class ConfirmPersonaData extends StatelessWidget {
           OutlinedButton(
             onPressed: () {
               ingresosProvider.reset();
-              routerProvider.push('/');
+              routerProvider.replace('/');
             },
             child: const Text('Cancelar'),
           ),
-          FilledButton.icon(
-            icon: const Icon(Icons.add),
-            label: const Text('Confirmar turno'),
-            onPressed: () async {
-              createTruno();
-            },
-          ),
+          ingresoFormState.isPosting
+              ? const LinearProgressIndicator(
+                  minHeight: 20,
+                )
+              : FilledButton.icon(
+                  icon: const Icon(Icons.add),
+                  label: const Text('Confirmar turno'),
+                  onPressed: () async {
+                    createTruno();
+                  },
+                ),
         ],
       ),
     );
@@ -164,8 +153,10 @@ class FormCreateIngreso extends StatelessWidget {
     required this.motivoController,
     required this.ingresoFormState,
     required this.serviceIngresos,
+    required this.alerToast,
   }) : _formKey = formKey;
 
+  final AlertNotifier alerToast;
   final GlobalKey<FormState> _formKey;
   final TextEditingController dniController;
   final IngresoNotifier ingresosProvider;
@@ -176,6 +167,42 @@ class FormCreateIngreso extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    createIngresoValues() async {
+      ingresosProvider.updateIsPosting(true);
+      try {
+        if (ingresoFormState.dni.length < 7) {
+          alerToast.showAlert(
+              message: 'Ingrese un documento valido',
+              alertType: AlertType.warning);
+        }
+        if (ingresoFormState.turno.isEmpty) {
+          alerToast.showAlert(
+              message: 'Ingrese un turno', alertType: AlertType.warning);
+          return;
+        }
+        if (ingresoFormState.dni.length > 7) {
+          final response =
+              await serviceIngresos.getPeronaByDni(ingresoFormState.dni);
+          if (response.statusCode == 200) {
+            final personaData = Persona.fromJson(response.data);
+            ingresosProvider.updatePersona(personaData);
+          } else {
+            alerToast.showAlert(
+                message: 'No se encontro persona con este DNI',
+                alertType: AlertType.warning);
+          }
+          return response;
+        }
+      } catch (error) {
+        alerToast.showAlert(
+            message: 'Ah ocurrido un error al buscar documento',
+            alertType: AlertType.error);
+        throw Exception(error);
+      } finally {
+        ingresosProvider.updateIsPosting(false);
+      }
+    }
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Form(
@@ -216,34 +243,6 @@ class FormCreateIngreso extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            TextFormField(
-              controller: turnoController,
-              onSaved: (value) {
-                ingresosProvider.updateTurno(value as String);
-              },
-              onChanged: (value) {
-                ingresosProvider.updateTurno(value);
-              },
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Por favor ingrese el turno';
-                }
-                return null;
-              },
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                labelText: 'turno',
-                focusColor: Theme.of(context).primaryColor,
-                focusedBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue),
-                ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Theme.of(context).primaryColor.withOpacity(0.5),
-                  ),
-                ),
-              ),
-            ),
             const SizedBox(height: 16),
             TextFormField(
               controller: motivoController,
@@ -273,6 +272,10 @@ class FormCreateIngreso extends StatelessWidget {
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Center(child: _TurnoSelection()),
+            ),
             const SizedBox(height: 16),
             OutlinedButton(
               onPressed: () {
@@ -280,33 +283,61 @@ class FormCreateIngreso extends StatelessWidget {
               },
               child: const Text('Cerrar'),
             ),
-            FilledButton.icon(
-              icon: const Icon(Icons.add),
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState?.save();
+            ingresoFormState.isPosting
+                ? const LinearProgressIndicator()
+                : FilledButton.icon(
+                    icon: const Icon(Icons.add),
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState?.save();
 
-                  try {
-                    if (ingresoFormState.dni.length > 7) {
-                      final response = await serviceIngresos
-                          .getPeronaByDni(ingresoFormState.dni);
-                      if (response.statusCode == 200) {
-                        final personaData = Persona.fromJson(response.data);
-                        ingresosProvider.updatePersona(personaData);
+                        createIngresoValues();
+                        // Aquí puedes agregar la lógica para guardar los datos
                       }
-                      return response;
-                    }
-                  } catch (error) {
-                    throw Exception(error);
-                  }
-                  // Aquí puedes agregar la lógica para guardar los datos
-                }
-              },
-              label: const Text('Agregar'),
-            ),
+                    },
+                    label: const Text('Agregar'),
+                  ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _TurnoSelection extends ConsumerStatefulWidget {
+  @override
+  _TurnoSelectionState createState() => _TurnoSelectionState();
+}
+
+class _TurnoSelectionState extends ConsumerState<_TurnoSelection> {
+  final List<bool> _selections = List.generate(3, (_) => false);
+  final List<String> _turnos = ['mañana', 'tarde', 'noche'];
+
+  void _updateSelection(int index) {
+    String selectedTurno = ref.watch(ingresoFormProvider).turno;
+
+    setState(() {
+      for (int i = 0; i < _selections.length; i++) {
+        _selections[i] = i == index;
+      }
+      selectedTurno = _turnos[index];
+    });
+    // Aquí puedes llamar a tu proveedor para actualizar el estado
+    ref.read(ingresoFormProvider.notifier).updateTurno(selectedTurno);
+    // ingresosProvider.updateTurno(_selectedTurno);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ToggleButtons(
+      isSelected: _selections,
+      onPressed: _updateSelection,
+      children: _turnos
+          .map((turno) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(turno),
+              ))
+          .toList(),
     );
   }
 }
