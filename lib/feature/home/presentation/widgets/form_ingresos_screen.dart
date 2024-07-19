@@ -182,7 +182,7 @@ class FormCreateIngreso extends StatelessWidget {
         }
         if (ingresoFormState.dni.length > 7) {
           final response =
-              await serviceIngresos.getPeronaByDni(ingresoFormState.dni);
+              await serviceIngresos.getPeronaByDni(dni: ingresoFormState.dni);
           if (response.statusCode == 200) {
             final personaData = Persona.fromJson(response.data);
             ingresosProvider.updatePersona(personaData);

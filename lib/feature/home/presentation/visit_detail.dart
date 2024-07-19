@@ -22,7 +22,19 @@ class VisitDetail extends StatelessWidget {
           ),
         ]),
       ),
-      body: Center(child: Text('Detalle de la visita id: $visitId')),
+      body: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Pagina en construccion',
+              style: TextStyle(fontSize: 20),
+            ),
+            Text('Detalle de la visita id: $visitId'),
+          ],
+        ),
+      ),
     );
   }
 }

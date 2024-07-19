@@ -50,7 +50,7 @@ class HomeContent extends ConsumerWidget {
                                       .push('/visit-detail/${visit.id}');
                                 },
                                 leading: const Icon(
-                                  Icons.account_circle_outlined,
+                                  Icons.date_range_outlined,
                                   size: 40,
                                 ),
                                 title: Column(

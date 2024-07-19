@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nodo_app_2/feature/home/domain/person_entity.dart';
 import 'package:nodo_app_2/feature/home/domain/visit_entity.dart';
 import 'package:nodo_app_2/feature/home/infraestructure/services/visits_service.dart';
 
@@ -13,7 +14,6 @@ final currentVisitsProvider = FutureProvider<List<Visita>>((ref) async {
   }
 });
 
-
 final visitsProvider = FutureProvider<List<Visita>>((ref) async {
   try {
     final apiResponse = await visitService.getVisits();
@@ -23,3 +23,21 @@ final visitsProvider = FutureProvider<List<Visita>>((ref) async {
   }
 });
 
+final employesProvider = FutureProvider<List<Persona>>((ref) async {
+  try {
+    final apiResponse = await visitService.getPersonas();
+    return apiResponse;
+  } catch (error) {
+    throw Error();
+  }
+});
+
+final searchPersonaByDniProvider =
+    FutureProvider.family<Persona, String>((ref, dni) async {
+  try {
+    final apiResponse = await visitService.getPeronaByDni(dni: dni);
+    return apiResponse;
+  } catch (error) {
+    throw Error();
+  }
+});

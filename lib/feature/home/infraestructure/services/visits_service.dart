@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:nodo_app_2/feature/home/domain/person_entity.dart';
 import 'package:nodo_app_2/feature/home/domain/visit_entity.dart';
 import 'package:nodo_app_2/feature/home/infraestructure/services/mappers/visit_mapper.dart';
 import 'package:nodo_app_2/shared/services/api_client.dart';
@@ -55,7 +56,24 @@ class VisitService {
     }
   }
 
-  Future getPeronaByDni(String dni) async {
+  Future getPersonas() async {
+    try {
+      final apiResponse = await api.getHttp(path: '/persona');
+      if (apiResponse.statusCode == 200) {
+        final List<dynamic> empleadosList = apiResponse.data;
+        final List<Persona> empleados = empleadosList
+            .map((visita) => PersonaMapper.personaJsonToEntity(visita))
+            .toList();
+        return empleados;
+      } else {
+        throw Exception('Error al traer listado de visitantes');
+      }
+    } on DioException catch (error) {
+      return error.response;
+    }
+  }
+
+  Future getPeronaByDni({required String dni}) async {
     try {
       final apiResponse = await api.getHttp(path: '/persona/buscar/dni/$dni');
       return apiResponse;
