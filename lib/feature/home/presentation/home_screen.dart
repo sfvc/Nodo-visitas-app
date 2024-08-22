@@ -36,11 +36,18 @@ class HomeScreen extends ConsumerWidget {
         child: _HomeBody(),
       ),
       bottomNavigationBar: const BottomNavigationCommon(),
+      // floatingActionButton: FilledButton.icon(
+      //   icon: const Icon(Icons.add),
+      //   label: const Text('NUEVO'),
+      //   onPressed: () {
+      //     ref.read(goRouterProvider).push('/form-ingreso');
+      //   },
+      // ),
       floatingActionButton: FilledButton.icon(
-        icon: const Icon(Icons.add),
-        label: const Text('NUEVO'),
+        icon: const Icon(Icons.qr_code),
+        label: const Text('scanear'),
         onPressed: () {
-          ref.read(goRouterProvider).push('/form-ingreso');
+          ref.read(goRouterProvider).push('/scan-qr');
         },
       ),
     );

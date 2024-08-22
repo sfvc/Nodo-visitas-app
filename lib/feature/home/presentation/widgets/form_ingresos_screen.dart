@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:nodo_app_2/config/router/app_router.dart';
 import 'package:nodo_app_2/feature/home/domain/person_entity.dart';
 import 'package:nodo_app_2/feature/home/infraestructure/services/visits_service.dart';
-import 'package:nodo_app_2/feature/home/providers/form_ingreso_provider.dart';
+import 'package:nodo_app_2/feature/ingresos/providers/form_ingreso_provider.dart';
 import 'package:nodo_app_2/shared/providers/aler_toast_provider.dart';
 
 class FormIngresos extends ConsumerWidget {
@@ -20,28 +20,28 @@ class FormIngresos extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ingresoFormState = ref.watch(ingresoFormProvider);
     final ingresosProvider = ref.read(ingresoFormProvider.notifier);
-    // ref.read(goRouterProvider).push('/notifications');
     final routerProvider = ref.read(goRouterProvider);
     final alerToast = ref.read(alertProvider.notifier);
 
     return Scaffold(
-        appBar: AppBar(),
-        body: ingresoFormState.persona == null
-            ? FormCreateIngreso(
-                formKey: _formKey,
-                alerToast: alerToast,
-                dniController: dniController,
-                ingresosProvider: ingresosProvider,
-                turnoController: turnoController,
-                motivoController: motivoController,
-                ingresoFormState: ingresoFormState,
-                serviceIngresos: serviceIngresos)
-            : ConfirmPersonaData(
-                alerToast: alerToast,
-                ingresoFormState: ingresoFormState,
-                ingresosProvider: ingresosProvider,
-                routerProvider: routerProvider,
-                serviceIngresos: serviceIngresos));
+      appBar: AppBar(),
+      body: ingresoFormState.persona == null
+          ? FormCreateIngreso(
+              formKey: _formKey,
+              alerToast: alerToast,
+              dniController: dniController,
+              ingresosProvider: ingresosProvider,
+              turnoController: turnoController,
+              motivoController: motivoController,
+              ingresoFormState: ingresoFormState,
+              serviceIngresos: serviceIngresos)
+          : ConfirmPersonaData(
+              alerToast: alerToast,
+              ingresoFormState: ingresoFormState,
+              ingresosProvider: ingresosProvider,
+              routerProvider: routerProvider,
+              serviceIngresos: serviceIngresos),
+    );
   }
 }
 
@@ -143,7 +143,7 @@ class ConfirmPersonaData extends StatelessWidget {
   }
 }
 
-class FormCreateIngreso extends StatelessWidget {
+class FormCreateIngreso extends ConsumerWidget {
   const FormCreateIngreso({
     super.key,
     required GlobalKey<FormState> formKey,
@@ -166,7 +166,7 @@ class FormCreateIngreso extends StatelessWidget {
   final VisitService serviceIngresos;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     createIngresoValues() async {
       ingresosProvider.updateIsPosting(true);
       try {
@@ -216,8 +216,6 @@ class FormCreateIngreso extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             TextFormField(
-              // initialValue:
-              //     ingresoFormState.dni.isEmpty ? null : ingresoFormState.dni,
               controller: dniController,
               onChanged: (value) {
                 ingresosProvider.updateDni(value);
@@ -279,7 +277,7 @@ class FormCreateIngreso extends StatelessWidget {
             const SizedBox(height: 16),
             OutlinedButton(
               onPressed: () {
-                Navigator.pop(context); // Navigate back to previous screen
+                ref.read(goRouterProvider).pop('/');
               },
               child: const Text('Cerrar'),
             ),
@@ -290,9 +288,7 @@ class FormCreateIngreso extends StatelessWidget {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState?.save();
-
                         createIngresoValues();
-                        // Aquí puedes agregar la lógica para guardar los datos
                       }
                     },
                     label: const Text('Agregar'),
