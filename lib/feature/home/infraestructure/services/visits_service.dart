@@ -11,7 +11,8 @@ class VisitService {
   final intlService = IntlService();
 
   Future getCurrentVisits() async {
-    final currentDate = intlService.getCurrentDateFormatted();
+    // final currentDate = intlService.getCurrentDateFormatted();
+    const currentDate = 2024 - 07 - 19;
 
     try {
       final apiResponse =

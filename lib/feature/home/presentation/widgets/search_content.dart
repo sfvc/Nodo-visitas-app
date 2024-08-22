@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nodo_app_2/config/router/app_router.dart';
 import 'package:nodo_app_2/feature/home/domain/visit_entity.dart';
-import 'package:nodo_app_2/feature/home/providers/visits_provider.dart';
+import 'package:nodo_app_2/feature/ingresos/providers/visits_provider.dart';
 
 class SearchContent extends ConsumerWidget {
   const SearchContent({super.key});
