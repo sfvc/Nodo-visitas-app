@@ -19,5 +19,13 @@ final goRouterProvider = Provider((ref) {
       path: '/form-ingreso',
       builder: (context, state) => FormIngresos(),
     ),
+    GoRoute(
+      path: '/scan-qr',
+      builder: (context, state) => const QRScannerScreen(),
+    ),
+    GoRoute(
+      path: '/test',
+      builder: (context, state) => const TestScreen(),
+    ),
   ]);
 });

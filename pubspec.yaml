@@ -45,6 +45,7 @@ dependencies:
   google_fonts: ^6.2.1
   intl: ^0.19.0
   modal_bottom_sheet: ^3.0.0
+  qr_code_scanner: ^1.0.1
   searchable_listview: ^2.14.0
   syncfusion_flutter_datepicker: ^26.1.40
 
