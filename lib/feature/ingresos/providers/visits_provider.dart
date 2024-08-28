@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nodo_app_2/feature/home/domain/person_entity.dart';
-import 'package:nodo_app_2/feature/home/domain/visit_entity.dart';
-import 'package:nodo_app_2/feature/home/infraestructure/services/visits_service.dart';
+import 'package:nodo_app_2/feature/ingresos/domain/entiy/visit_entity.dart';
+import 'package:nodo_app_2/feature/ingresos/domain/services/visits_service.dart';
 
 final visitService = VisitService();
 

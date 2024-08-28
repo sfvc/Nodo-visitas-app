@@ -38,10 +38,6 @@ class QrScannerWidgetState extends ConsumerState<QRScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final colors = Theme.of(context).colorScheme;
-    // final subtitlesStyle = Theme.of(context).textTheme.titleMedium;
-    // final userId = ref.watch(authProvider).user?.userId;
-
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(

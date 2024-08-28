@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:nodo_app_2/feature/home/domain/person_entity.dart';
-import 'package:nodo_app_2/feature/home/domain/visit_entity.dart';
-import 'package:nodo_app_2/feature/home/infraestructure/services/mappers/visit_mapper.dart';
+import 'package:nodo_app_2/feature/ingresos/domain/entiy/visit_entity.dart';
+import 'package:nodo_app_2/feature/ingresos/domain/mappers/visit_mapper.dart';
 import 'package:nodo_app_2/shared/services/api_client.dart';
 import 'package:nodo_app_2/shared/shared_wapper.dart';
 

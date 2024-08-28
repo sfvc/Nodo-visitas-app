@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nodo_app_2/config/router/app_router.dart';
 import 'package:nodo_app_2/feature/home/domain/person_entity.dart';
-import 'package:nodo_app_2/feature/home/infraestructure/services/visits_service.dart';
+import 'package:nodo_app_2/feature/ingresos/domain/services/visits_service.dart';
 import 'package:nodo_app_2/feature/ingresos/providers/form_ingreso_provider.dart';
 import 'package:nodo_app_2/shared/providers/aler_toast_provider.dart';
 
@@ -167,6 +167,7 @@ class FormCreateIngreso extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final textThemes = Theme.of(context).textTheme;
     createIngresoValues() async {
       ingresosProvider.updateIsPosting(true);
       try {
@@ -274,13 +275,7 @@ class FormCreateIngreso extends ConsumerWidget {
               padding: const EdgeInsets.only(top: 20),
               child: Center(child: _TurnoSelection()),
             ),
-            const SizedBox(height: 16),
-            OutlinedButton(
-              onPressed: () {
-                ref.read(goRouterProvider).pop('/');
-              },
-              child: const Text('Cerrar'),
-            ),
+            const SizedBox(height: 20),
             ingresoFormState.isPosting
                 ? const LinearProgressIndicator()
                 : FilledButton.icon(
@@ -291,8 +286,28 @@ class FormCreateIngreso extends ConsumerWidget {
                         createIngresoValues();
                       }
                     },
-                    label: const Text('Agregar'),
+                    label: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'Agregar',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
                   ),
+            const SizedBox(height: 20),
+            OutlinedButton(
+              
+              onPressed: () {
+                ref.read(goRouterProvider).pop('/');
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Cerrar',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+            ),
           ],
         ),
       ),

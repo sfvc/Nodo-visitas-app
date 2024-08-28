@@ -1,5 +1,5 @@
 import 'package:nodo_app_2/feature/home/domain/person_entity.dart';
-import 'package:nodo_app_2/feature/home/domain/visit_entity.dart';
+import 'package:nodo_app_2/feature/ingresos/domain/entiy/visit_entity.dart';
 
 class VisitMapper {
   static Visita visitaJsonToEntity(Map<String, dynamic> json) {
