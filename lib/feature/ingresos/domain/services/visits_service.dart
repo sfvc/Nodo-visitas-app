@@ -11,8 +11,8 @@ class VisitService {
   final intlService = IntlService();
 
   Future getCurrentVisits() async {
-    // final currentDate = intlService.getCurrentDateFormatted();
-    const currentDate = 2024 - 07 - 19;
+    final currentDate = intlService.getCurrentDateFormatted();
+    // const currentDate = 2024 - 07 - 19;
 
     try {
       final apiResponse =
@@ -33,7 +33,7 @@ class VisitService {
 
   Future getVisits() async {
     try {
-      final apiResponse = await api.getHttp(path: '/ingresos');
+      final apiResponse = await api.getHttp(path: '/ingreso');
       if (apiResponse.statusCode == 200) {
         final List<dynamic> visitasList = apiResponse.data;
         final List<Visita> visitas = visitasList
@@ -50,7 +50,7 @@ class VisitService {
 
   Future createNewVisit(body) async {
     try {
-      final apiResponse = await api.postHttp(path: '/ingresos', body: body);
+      final apiResponse = await api.postHttp(path: '/ingreso', body: body);
       return apiResponse;
     } on DioException catch (error) {
       return error.response;
@@ -59,7 +59,7 @@ class VisitService {
 
   Future getPersonas() async {
     try {
-      final apiResponse = await api.getHttp(path: '/persona');
+      final apiResponse = await api.getHttp(path: '/personas');
       if (apiResponse.statusCode == 200) {
         final List<dynamic> empleadosList = apiResponse.data;
         final List<Persona> empleados = empleadosList
@@ -76,7 +76,7 @@ class VisitService {
 
   Future getPeronaByDni({required String dni}) async {
     try {
-      final apiResponse = await api.getHttp(path: '/persona/buscar/dni/$dni');
+      final apiResponse = await api.getHttp(path: '/personas/dni/$dni');
       return apiResponse;
     } on DioException catch (error) {
       return error.response;

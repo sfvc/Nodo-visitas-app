@@ -77,11 +77,11 @@ class HomeContent extends ConsumerWidget {
                                     Row(
                                       children: [Text(visit.persona.funcion)],
                                     ),
-                                    Row(
-                                      children: [
-                                        Text('DNI: ${visit.persona.dni}')
-                                      ],
-                                    ),
+                                    // Row(
+                                    //   children: [
+                                    //     Text('DNI: ${visit.persona.dni}')
+                                    //   ],
+                                    // ),
                                   ],
                                 ),
                                 trailing: Column(
@@ -108,8 +108,8 @@ class HomeContent extends ConsumerWidget {
       ),
       error: (error, stackTrace) {
         return const Center(
-            child: Text(
-                'Error al cargar la lista de estaciones, pruebe mas tarde'));
+            child:
+                Text('Error al cargar la lista de ingresos, pruebe mas tarde'));
       },
       loading: () {
         return const Center(child: Text('Cargando ...'));

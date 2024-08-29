@@ -8,7 +8,7 @@ final ingresoFormProvider =
 
 class IngresoFormState {
   final String dni;
-  final String turno;
+  final int turno;
   final String motivo;
   final Persona? persona;
   final bool isPosting;
@@ -17,13 +17,13 @@ class IngresoFormState {
     this.persona,
     this.isPosting = false,
     this.dni = '',
-    this.turno = '',
+    this.turno = -1,
     this.motivo = '',
   });
 
   IngresoFormState copyWith({
     String? dni,
-    String? turno,
+    int? turno,
     String? motivo,
     bool? isPosting,
     Persona? persona,
@@ -45,7 +45,7 @@ class IngresoNotifier extends StateNotifier<IngresoFormState> {
     state = state.copyWith(dni: dni);
   }
 
-  void updateTurno(String turno) {
+  void updateTurno(int turno) {
     state = state.copyWith(turno: turno);
   }
 

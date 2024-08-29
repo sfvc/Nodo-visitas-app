@@ -21,19 +21,20 @@ class VisitsContent extends ConsumerWidget {
             'Todas las visitas: ',
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Form(
-              child: TextField(
-                decoration: const InputDecoration(
-                  labelText: 'Buscar visitas',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.search),
-                ),
-                onChanged: (value) {},
-              ),
-            ),
-          ),
+
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: Form(
+          //     child: TextField(
+          //       decoration: const InputDecoration(
+          //         labelText: 'Buscar visitas',
+          //         border: OutlineInputBorder(),
+          //         prefixIcon: Icon(Icons.search),
+          //       ),
+          //       onChanged: (value) {},
+          //     ),
+          //   ),
+          // ),
           const SizedBox(height: 20),
           _listOfVisits(ref, visits, colors),
         ],
@@ -78,12 +79,17 @@ class VisitsContent extends ConsumerWidget {
                             children: [
                               Row(
                                 children: [
-                                  Text('${visit.persona.apellido} '),
+                                  Text(
+                                    visit.persona.apellido.toUpperCase(),
+                                    style: TextStyle(
+                                        color: colors.primary,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ],
                               ),
                               Row(
                                 children: [
-                                  Text('${visit.persona.nombre} '),
+                                  Text(visit.persona.nombre.toUpperCase()),
                                 ],
                               ),
                             ],
@@ -93,11 +99,8 @@ class VisitsContent extends ConsumerWidget {
                             children: [
                               const SizedBox(height: 3),
                               // Row(
-                              //   children: [Text(visit.motivo)],
+                              //   children: [Text(visit.persona.funcion)],
                               // ),
-                              Row(
-                                children: [Text(visit.persona.funcion)],
-                              ),
                               Row(
                                 children: [Text('DNI: ${visit.persona.dni}')],
                               ),
