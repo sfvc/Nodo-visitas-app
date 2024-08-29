@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:nodo_app_2/config/constants/enviroments.dart';
@@ -34,16 +33,26 @@ class MyApp extends ConsumerWidget {
         scheme: lightTheme,
         fontFamily: GoogleFonts.poppins().fontFamily,
         visualDensity: VisualDensity.adaptivePlatformDensity,
-      ).toTheme.copyWith(
-          // Additional customizations for the light theme if needed
+        textTheme: const TextTheme(
+          titleLarge: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 30,
           ),
+          titleMedium: TextStyle(
+            fontWeight: FontWeight.w100,
+            fontSize: 15,
+          ),
+          titleSmall: TextStyle(
+            fontWeight: FontWeight.normal,
+            fontSize: 12,
+          ),
+        ),
+      ).toTheme.copyWith(),
       darkTheme: FlexColorScheme.dark(
         scheme: darkTheme,
         fontFamily: GoogleFonts.poppins().fontFamily,
         visualDensity: VisualDensity.adaptivePlatformDensity,
-      ).toTheme.copyWith(
-          // Additional customizations for the dark theme if needed
-          ),
+      ).toTheme.copyWith(),
       themeMode: ThemeMode.system, // Use system theme mode (light/dark)
 
       debugShowCheckedModeBanner: false,
