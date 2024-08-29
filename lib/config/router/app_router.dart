@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nodo_app_2/feature/home/home_wrapper.dart';
+import 'package:nodo_app_2/feature/home/presentation/widgets/new_turno_form_screen.dart';
 
 final goRouterProvider = Provider((ref) {
   return GoRouter(initialLocation: '/', routes: [
@@ -26,6 +27,10 @@ final goRouterProvider = Provider((ref) {
     GoRoute(
       path: '/test',
       builder: (context, state) => const TestScreen(),
+    ),
+    GoRoute(
+      path: '/shift-person-not-found',
+      builder: (context, state) =>  NewTurnoForm(),
     ),
   ]);
 });
