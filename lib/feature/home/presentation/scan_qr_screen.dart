@@ -68,7 +68,7 @@ class QrScannerWidgetState extends ConsumerState<QRScannerScreen> {
                       child: Row(
                         children: [
                           Text(
-                            'Escanea el codigo en la bicicleta',
+                            'Escanea el codigo de DNI',
                             // style: subtitlesStyle,
                           ),
                           SizedBox(

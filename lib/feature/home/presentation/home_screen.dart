@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nodo_app_2/config/router/app_router.dart';
 import 'package:nodo_app_2/feature/home/home_wrapper.dart';
 import 'package:nodo_app_2/feature/home/providers/state.provider.dart';
 import 'package:nodo_app_2/shared/shared_wapper.dart';
@@ -35,6 +36,11 @@ class HomeScreen extends ConsumerWidget {
         child: _HomeBody(),
       ),
       bottomNavigationBar: const BottomNavigationCommon(),
+      // floatingActionButton: FilledButton(
+      //     onPressed: () {
+      //       ref.read(goRouterProvider).push('/shift-person-not-found');
+      //     },
+      //     child: const Text('nuevo ingreso')),
     );
   }
 }

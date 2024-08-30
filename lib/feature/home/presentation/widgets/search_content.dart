@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nodo_app_2/config/router/app_router.dart';
+import 'package:intl/intl.dart';
 import 'package:nodo_app_2/feature/ingresos/domain/entiy/visit_entity.dart';
 import 'package:nodo_app_2/feature/ingresos/providers/visits_provider.dart';
 
@@ -63,24 +63,26 @@ class VisitsContent extends ConsumerWidget {
                   itemCount: visits.length,
                   itemBuilder: (context, index) {
                     final visit = visits[index];
+
                     return Column(
                       children: [
                         ListTile(
-                          onTap: () {
-                            ref
-                                .read(goRouterProvider)
-                                .push('/visit-detail/${visit.id}');
-                          },
-                          leading: const Icon(
-                            Icons.event_repeat_outlined,
+                          // onTap: () {
+                          //   ref
+                          //       .read(goRouterProvider)
+                          //       .push('/visit-detail/${visit.id}');
+                          // },
+                          leading: Icon(
+                            Icons.event_available,
                             size: 40,
+                            color: colors.primary,
                           ),
                           title: Column(
                             children: [
                               Row(
                                 children: [
                                   Text(
-                                    visit.persona.apellido.toUpperCase(),
+                                    visit.persona?.apellido ?? '',
                                     style: TextStyle(
                                         color: colors.primary,
                                         fontWeight: FontWeight.bold),
@@ -89,7 +91,8 @@ class VisitsContent extends ConsumerWidget {
                               ),
                               Row(
                                 children: [
-                                  Text(visit.persona.nombre.toUpperCase()),
+                                  Text(visit.persona?.nombre.toUpperCase() ??
+                                      ''),
                                 ],
                               ),
                             ],
@@ -102,7 +105,7 @@ class VisitsContent extends ConsumerWidget {
                               //   children: [Text(visit.persona.funcion)],
                               // ),
                               Row(
-                                children: [Text('DNI: ${visit.persona.dni}')],
+                                children: [Text('DNI: ${visit.persona?.dni}')],
                               ),
                               Row(
                                 children: [Text('Id: ${visit.id}')],
@@ -110,10 +113,12 @@ class VisitsContent extends ConsumerWidget {
                             ],
                           ),
                           trailing: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Text(visit.dia),
-                              Text(visit.hora),
+                              Text(DateFormat('dd/MM/yyyy')
+                                  .format(visit.fechaCreacion)),
+                              Text(
+                                  '${DateFormat('HH:mm').format(visit.fechaCreacion)} Hs'),
                             ],
                           ),
                           isThreeLine: false,
