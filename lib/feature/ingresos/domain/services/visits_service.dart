@@ -44,7 +44,9 @@ class VisitService {
         throw Exception('Error al traer listado de visitantes');
       }
     } on DioException catch (error) {
-      return error.response;
+      throw Exception('Error de conexión: ${error.message}');
+    } catch (e) {
+      throw Exception('Error al obtener las visitas');
     }
   }
 

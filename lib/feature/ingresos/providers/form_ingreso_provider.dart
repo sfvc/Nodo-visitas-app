@@ -45,6 +45,32 @@ class IngresoNotifier extends StateNotifier<IngresoFormState> {
     state = state.copyWith(dni: dni);
   }
 
+  void setValuesByQrCode(String? qrValue){
+    if (qrValue == null) return;
+    List<String> parts = qrValue.split('@');
+    state = state.copyWith(
+      dni: parts[4],
+    );
+  }
+
+  //  void setQRValue(String? qrValue) {
+  //   if (qrValue == null) return;
+
+  //   List<String> parts = qrValue.split('@');
+  //   if (parts.length == 9) {
+  //     state = state.copyWith(
+  //       numeroTramite: parts[0],
+  //       apellido: parts[1],
+  //       nombre: parts[2],
+  //       sexo: parts[3],
+  //       dni: parts[4],
+  //       ejemplar: parts[5],
+  //       fechaNacimiento: parts[6],
+  //       fechaEmision: parts[7],
+  //     );
+  //   }
+  // }
+
   void updateTurno(int turno) {
     state = state.copyWith(turno: turno);
   }
