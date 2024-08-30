@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nodo_app_2/config/router/app_router.dart';
+import 'package:nodo_app_2/feature/home/providers/state.provider.dart';
 import 'package:nodo_app_2/feature/ingresos/domain/services/visits_service.dart';
 import 'package:nodo_app_2/feature/ingresos/providers/form_ingreso_provider.dart';
 import 'package:nodo_app_2/shared/providers/aler_toast_provider.dart';
@@ -10,6 +11,7 @@ class FormIngresos extends ConsumerWidget {
   final _formKey = GlobalKey<FormState>();
   final dniController = TextEditingController();
   final turnoController = TextEditingController();
+  final motivoController = TextEditingController();
   final serviceIngresos = VisitService();
 
   FormIngresos({super.key});
@@ -34,6 +36,7 @@ class FormIngresos extends ConsumerWidget {
           ingresoFormState: ingresoFormState,
           serviceIngresos: serviceIngresos,
           routerProvider: routerProvider,
+          motivoController: motivoController,
         )
         // : ConfirmPersonaData(
         //     alerToast: alerToast,
@@ -51,6 +54,7 @@ class FormCreateIngreso extends ConsumerWidget {
     super.key,
     required GlobalKey<FormState> formKey,
     required this.dniController,
+    required this.motivoController,
     required this.ingresosProvider,
     required this.turnoController,
     required this.routerProvider,
@@ -62,6 +66,7 @@ class FormCreateIngreso extends ConsumerWidget {
   final AlertNotifier alerToast;
   final GlobalKey<FormState> _formKey;
   final TextEditingController dniController;
+  final TextEditingController motivoController;
   final IngresoNotifier ingresosProvider;
   final TextEditingController turnoController;
   final GoRouter routerProvider;
@@ -72,10 +77,13 @@ class FormCreateIngreso extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // final textThemes = Theme.of(context).textTheme;
     final colors = Theme.of(context).colorScheme;
+    final navigationIndex = ref.read(bottomNavigationIndexProvider.notifier);
 
     clearForm() {
       dniController.text = "";
       turnoController.text = "";
+      motivoController.text = "";
+      navigationIndex.update((state) => 0);
     }
 
     createIngresoValues() async {
@@ -83,12 +91,15 @@ class FormCreateIngreso extends ConsumerWidget {
       try {
         final getPeronaByDniResponse =
             await serviceIngresos.getPeronaByDni(dni: ingresoFormState.dni);
-
         if (getPeronaByDniResponse.statusCode == 200) {
           final personaData = getPeronaByDniResponse.data;
+
           final Map<String, dynamic> body = {
             'turno': ingresoFormState.turno,
-            'personaId': personaData['id'],
+            'nombre': personaData['nombre'],
+            'apellido': personaData['apellido'],
+            'dni': personaData['dni'],
+            'motivo': ingresoFormState.motivo,
           };
 
           final createTurnoResponse =
@@ -142,7 +153,7 @@ class FormCreateIngreso extends ConsumerWidget {
                   return 'Por favor ingrese el DNI';
                 }
                 if (value.length < 8) {
-                  return 'Por favor ingrese valido';
+                  return 'Por favor ingrese DNI valido';
                 }
                 return null;
               },
@@ -161,6 +172,34 @@ class FormCreateIngreso extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 16),
+            TextFormField(
+              controller: motivoController,
+              onChanged: (value) {
+                ingresosProvider.updateMotivo(value);
+              },
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Por favor ingrese motivo de la visita';
+                }
+                if (value.length < 3) {
+                  return 'Motivo demasiado corto';
+                }
+                return null;
+              },
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Motivo de la visita',
+                focusColor: Theme.of(context).primaryColor,
+                focusedBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blue),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Theme.of(context).primaryColor.withOpacity(0.5),
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(height: 16),
 
             Padding(
@@ -187,12 +226,14 @@ class FormCreateIngreso extends ConsumerWidget {
                 ? const LinearProgressIndicator()
                 : FilledButton.icon(
                     icon: const Icon(Icons.add),
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState?.save();
-                        createIngresoValues();
-                      }
-                    },
+                    onPressed: ingresoFormState.turno == -1
+                        ? null
+                        : () async {
+                            if (_formKey.currentState!.validate()) {
+                              _formKey.currentState?.save();
+                              createIngresoValues();
+                            }
+                          },
                     label: const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Text(
@@ -204,7 +245,7 @@ class FormCreateIngreso extends ConsumerWidget {
             const SizedBox(height: 20),
             // OutlinedButton(
             //   onPressed: () {
-            //     ref.read(goRouterProvider).pop('/');
+            //     ref.read(goRouterProvider).go('/');
             //   },
             //   child: const Padding(
             //     padding: EdgeInsets.all(8.0),
